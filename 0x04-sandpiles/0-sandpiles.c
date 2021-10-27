@@ -1,109 +1,92 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "sandpiles.h"
 
 /**
- * print_grid - print a grid
- * @grid: grid
+ * check - check for stability
+ * @grid: Left 3x3 grid
+ * Return: int
+ *
  */
-static void print_grid(int grid[3][3])
+int check(int grid[3][3])
 {
-int i, j;
-
-for (i = 0; i < 3; i++)
-{
-for (j = 0; j < 3; j++)
-{
-if (j)
-printf(" ");
-printf("%d", grid[i][j]);
-}
-printf("\n");
-}
+ int i = 0, j = 0;
+ for (i = 0; i < 3; i++)
+ {
+  for (j = 0; j < 3; j++)
+  {
+   if (grid[i][j] > 3)
+    return (1);
+  }
+ }
+ return (0);
 }
 
 /**
- * sandpiles_sum - sums two sandpiles
- * @grid1: first grid
- * @grid2: second grid
+ * print - Print 3x3 grid
+ * @grid: 3x3 grid
+ *
+ */
+void print(int grid[3][3])
+{
+ int i, j;
+
+ for (i = 0; i < 3; i++)
+ {
+  for (j = 0; j < 3; j++)
+  {
+   if (j)
+    printf(" ");
+   printf("%d", grid[i][j]);
+  }
+  printf("\n");
+ }
+}
+
+/**
+ * sandpiles_sum - Print 3x3 grids sum
+ * @grid1: Left 3x3 grid
+ * @grid2: Right 3x3 grid
+ *
  */
 void sandpiles_sum(int grid1[3][3], int grid2[3][3])
 {
-int i, j;
-for (i = 0; i < 3; i++)
-{
-for (j = 0; j < 3; j++)
-grid1[i][j] += grid2[i][j];
-}
-while (!is_stable(grid1))
-{
-printf("=\n");
-print_grid(grid1);
-topple(grid1);
-}
-}
+ int i = 0, j = 0, x = 0, y = 0, var = 0;
+ int tmp[3][3];
 
-/**
- * topple - topples sand
- * @grid: sandpile
- */
-void topple(int grid[3][3])
-{
-int i, j;
-int new_gird[3][3];
-copy_grid(grid, new_gird);
-for (i = 0; i < 3; i++)
-{
-for (j = 0; j < 3; j++)
-{
-if (new_gird[i][j] > 3)
-{
-grid[i][j] -= 4;
-if (i + 1 < 3)
-grid[i + 1][j] += 1;
-if (j + 1 < 3)
-grid[i][j + 1] += 1;
-if (i - 1 >= 0)
-grid[i - 1][j] += 1;
-if (j - 1 >= 0)
-grid[i][j - 1] += 1;
-}
-}
-}
-}
-
-/**
- * is_stable - checks if sandpile is stable
- * @grid: sandpile
- * Return: 1 if stable 0 if not
- */
-int is_stable(int grid[3][3])
-{
-int i, j;
-
-for (i = 0; i < 3; i++)
-{
-for (j = 0; j < 3; j++)
-{
-if (grid[i][j] > 3)
-return (0);
-}
-}
-return (1);
-}
-
-/**
- * copy_grid - copies a grid
- * @grid: grid to copy
- * @new_grid: destination grid
- * Return: a copy of the grid
- */
-void copy_grid(int grid[3][3], int new_grid[3][3])
-{
-int i, j;
-for (i = 0; i < 3; i++)
-{
-for (j = 0; j < 3; j++)
-new_grid[i][j] = grid[i][j];
-}
+ for (i = 0; i < 3; i++)
+ {
+  for (j = 0; j < 3; j++)
+  {
+   grid1[i][j] = grid1[i][j] + grid2[i][j];
+  }
+ }
+ var = check(grid1);
+ while (var == 1)
+ {
+  printf("=\n");
+  print(grid1);
+  for (i = 0; i < 3; i++)
+  {
+   for (j = 0; j < 3; j++)
+    tmp[i][j] = grid1[i][j];
+  }
+  for (x = 0; x < 3; x++)
+  {
+   for (y = 0; y < 3; y++)
+   {
+    if (tmp[x][y] >= 4)
+    {
+     grid1[x][y] -= 4;
+     if (x >= 1)
+      grid1[x - 1][y] += 1;
+     if (x <= 1)
+      grid1[x + 1][y] += 1;
+     if (y >= 1)
+      grid1[x][y - 1] += 1;
+     if (y <= 1)
+      grid1[x][y + 1] += 1;
+    }
+   }
+  }
+  var = check(grid1);
+ }
 }
