@@ -75,7 +75,6 @@ grid[i][j - 1] += 1;
 
 /**
  * is_stable - checks if sandpile is stable
- *
  * @grid: sandpile
  * Return: 1 if stable 0 if not
  */
@@ -96,7 +95,6 @@ return (1);
 
 /**
  * copy_grid - copies a grid
- *
  * @grid: grid to copy
  * @new_grid: destination grid
  * Return: a copy of the grid
